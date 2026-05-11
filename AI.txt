@@ -1,0 +1,745 @@
+BFS :
+
+from collections import defaultdict
+
+class Graph:
+
+    # Constructor
+    def __init__(self):
+        # default dictionary to store graph
+        self.graph = defaultdict(list)
+
+    # function to add an edge to graph
+    def addEdge(self, u, v):
+        self.graph[u].append(v)
+
+    # Function to print a BFS of graph
+    def BFS(self, s):
+
+        # Mark all the vertices as not visited
+        visited = [False] * (max(self.graph) + 1)
+
+        # Create a queue for BFS
+        queue = []
+
+        # Mark the source node as visited and enqueue it
+        queue.append(s)
+        visited[s] = True
+
+        while queue:
+
+            # Dequeue a vertex from queue and print it
+            s = queue.pop(0)
+            print(s, end=" ")
+
+            # Get all adjacent vertices
+            for i in self.graph[s]:
+                if visited[i] == False:
+                    queue.append(i)
+                    visited[i] = True
+
+
+# Driver code
+# Create a graph given in the above diagram
+g = Graph()
+g.addEdge(0, 1)
+g.addEdge(0, 2)
+g.addEdge(1, 2)
+g.addEdge(2, 0)
+g.addEdge(2, 3)
+g.addEdge(3, 3)
+
+print("Following is Breadth First Traversal (starting from vertex 2)")
+g.BFS(2)
+
+'''
+OUTPUT:
+Following is Breadth First Traversal (starting from vertex 2)
+2 0 3 1 
+'''
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+ DFS :
+
+from collections import defaultdict
+
+# This class represents a directed graph
+# using adjacency list representation
+class Graph:
+
+    # Constructor
+    def __init__(self):
+        # Default dictionary to store graph
+        self.graph = defaultdict(list)
+
+    # Function to add an edge to graph
+    def addEdge(self, u, v):
+        self.graph[u].append(v)
+
+    # A function used by DFS
+    def DFSUtil(self, v, visited):
+
+        # Mark current node as visited
+        visited.add(v)
+        print(v, end=' ')
+
+        # Recur for all adjacent vertices
+        for neighbour in self.graph[v]:
+            if neighbour not in visited:
+                self.DFSUtil(neighbour, visited)
+
+    # Function to do DFS traversal
+    def DFS(self, v):
+
+        # Create a set to store visited nodes
+        visited = set()
+
+        # Call recursive helper function
+        self.DFSUtil(v, visited)
+
+
+# Driver code
+g = Graph()
+g.addEdge(0, 1)
+g.addEdge(0, 2)
+g.addEdge(1, 2)
+g.addEdge(2, 0)
+g.addEdge(2, 3)
+g.addEdge(3, 3)
+
+print("Following is DFS from (starting from vertex 2)")
+g.DFS(2)
+
+'''
+OUTPUT:
+Following is DFS from (starting from vertex 2)
+2 0 1 3 
+'''
+
+----------------------------------------------------------------------------------------------------------------------------------------------
+aSTAR:
+
+class Node:
+    def __init__(self, data, level, fval):
+        """
+        Initialize the node with the data,
+        level of the node and the calculated fvalue
+        """
+        self.data = data
+        self.level = level
+        self.fval = fval
+
+    def generate_child(self):
+        """
+        Generate child nodes by moving the blank space
+        in four directions: left, right, up, down
+        """
+        x, y = self.find(self.data, '_')
+
+        # Possible positions for movement
+        val_list = [
+            [x, y - 1],  # left
+            [x, y + 1],  # right
+            [x - 1, y],  # up
+            [x + 1, y]   # down
+        ]
+
+        children = []
+
+        for i in val_list:
+            child = self.shuffle(
+                self.data,
+                x, y,
+                i[0], i[1]
+            )
+
+            if child is not None:
+                child_node = Node(
+                    child,
+                    self.level + 1,
+                    0
+                )
+                children.append(child_node)
+
+        return children
+
+    def shuffle(self, puz, x1, y1, x2, y2):
+        """
+        Move blank space and return new puzzle
+        """
+
+        if (
+            x2 >= 0 and
+            x2 < len(self.data) and
+            y2 >= 0 and
+            y2 < len(self.data)
+        ):
+
+            temp_puz = self.copy(puz)
+
+            # Swap tiles
+            temp = temp_puz[x2][y2]
+            temp_puz[x2][y2] = temp_puz[x1][y1]
+            temp_puz[x1][y1] = temp
+
+            return temp_puz
+
+        else:
+            return None
+
+    def copy(self, root):
+        """
+        Create a copy of puzzle matrix
+        """
+        temp = []
+
+        for i in root:
+            t = []
+
+            for j in i:
+                t.append(j)
+
+            temp.append(t)
+
+        return temp
+
+    def find(self, puz, x):
+        """
+        Find position of blank space '_'
+        """
+        for i in range(len(self.data)):
+            for j in range(len(self.data)):
+                if puz[i][j] == x:
+                    return i, j
+
+
+class Puzzle:
+    def __init__(self, size):
+        """
+        Initialize puzzle
+        """
+        self.n = size
+        self.open = []
+        self.closed = []
+
+    def accept(self):
+        """
+        Accept puzzle input from user
+        """
+        puz = []
+
+        for i in range(self.n):
+            temp = input().split(" ")
+            puz.append(temp)
+
+        return puz
+
+    def f(self, start, goal):
+        """
+        f(x) = h(x) + g(x)
+        """
+        return self.h(start.data, goal) + start.level
+
+    def h(self, start, goal):
+        """
+        Calculate number of misplaced tiles
+        """
+        temp = 0
+
+        for i in range(self.n):
+            for j in range(self.n):
+
+                if (
+                    start[i][j] != goal[i][j]
+                    and start[i][j] != '_'
+                ):
+                    temp += 1
+
+        return temp
+
+    def process(self):
+        """
+        Start solving puzzle
+        """
+
+        print("Enter the start state matrix:")
+        start = self.accept()
+
+        print("Enter the goal state matrix:")
+        goal = self.accept()
+
+        start = Node(start, 0, 0)
+        start.fval = self.f(start, goal)
+
+        # Add start node to open list
+        self.open.append(start)
+
+        print("\n")
+
+        while True:
+
+            cur = self.open[0]
+
+            print("")
+            print(" | ")
+            print(" | ")
+            print(" \\/")
+            print(" V ")
+
+            # Print current state
+            for i in cur.data:
+                for j in i:
+                    print(j, end=" ")
+                print("")
+
+            # Goal state reached
+            if self.h(cur.data, goal) == 0:
+                break
+
+            # Generate children
+            for i in cur.generate_child():
+                i.fval = self.f(i, goal)
+                self.open.append(i)
+
+            self.closed.append(cur)
+
+            # Remove current node
+            del self.open[0]
+
+            # Sort open list by f value
+            self.open.sort(
+                key=lambda x: x.fval,
+                reverse=False
+            )
+
+
+# Driver code
+puz = Puzzle(3)
+puz.process()
+
+'''
+OUTPUT:
+Enter the start state matrix:
+1 2 3
+_ 4 6
+7 5 8
+Enter the goal state matrix:
+1 2 3
+4 5 6
+7 8 _
+
+
+
+ | 
+ | 
+ \/
+ V 
+1 2 3 
+_ 4 6 
+7 5 8 
+
+ | 
+ | 
+ \/
+ V 
+1 2 3 
+4 _ 6 
+7 5 8 
+
+ | 
+ | 
+ \/
+ V 
+1 2 3 
+4 5 6 
+7 _ 8 
+
+ | 
+ | 
+ \/
+ V 
+1 2 3 
+4 5 6 
+7 8 _ 
+'''
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+PRIMS :
+
+import sys
+
+
+class Graph:
+
+    def __init__(self, vertices):
+        self.V = vertices
+
+        # Create graph matrix
+        self.graph = [
+            [0 for column in range(vertices)]
+            for row in range(vertices)
+        ]
+
+    # Print MST
+    def printMST(self, parent):
+
+        print("Edge \tWeight")
+
+        for i in range(1, self.V):
+            print(
+                parent[i],
+                "-",
+                i,
+                "\t",
+                self.graph[i][parent[i]]
+            )
+
+    # Find minimum key vertex
+    def minKey(self, key, mstSet):
+
+        min_value = sys.maxsize
+
+        for v in range(self.V):
+
+            if (
+                key[v] < min_value
+                and mstSet[v] == False
+            ):
+                min_value = key[v]
+                min_index = v
+
+        return min_index
+
+    # Prim's Algorithm
+    def primMST(self):
+
+        # Store minimum values
+        key = [sys.maxsize] * self.V
+
+        # Store MST
+        parent = [None] * self.V
+
+        # First vertex
+        key[0] = 0
+        parent[0] = -1
+
+        mstSet = [False] * self.V
+
+        for count in range(self.V):
+
+            # Pick minimum vertex
+            u = self.minKey(key, mstSet)
+
+            mstSet[u] = True
+
+            # Update adjacent vertices
+            for v in range(self.V):
+
+                if (
+                    self.graph[u][v] > 0
+                    and mstSet[v] == False
+                    and key[v] > self.graph[u][v]
+                ):
+
+                    key[v] = self.graph[u][v]
+                    parent[v] = u
+
+        self.printMST(parent)
+
+
+# Driver code
+g = Graph(5)
+
+g.graph = [
+    [0, 2, 0, 6, 0],
+    [2, 0, 3, 8, 5],
+    [0, 3, 0, 0, 7],
+    [6, 8, 0, 0, 9],
+    [0, 5, 7, 9, 0]
+]
+
+g.primMST()
+
+'''
+OUTPUT:
+Edge    Weight
+0 - 1    2
+1 - 2    3
+0 - 3    6
+1 - 4    5
+'''
+
+---------------------------------------------------------------------------------------------------------------------------
+KRUSKALS:
+
+class Graph:
+
+    def __init__(self, vertices):
+        self.V = vertices
+        self.graph = []
+
+    # Add edge
+    def addEdge(self, u, v, w):
+        self.graph.append([u, v, w])
+
+    # Find set of an element (Path Compression)
+    def find(self, parent, i):
+
+        if parent[i] == i:
+            return i
+
+        return self.find(parent, parent[i])
+
+    # Union of two sets (Union by Rank)
+    def union(self, parent, rank, x, y):
+
+        xroot = self.find(parent, x)
+        yroot = self.find(parent, y)
+
+        if rank[xroot] < rank[yroot]:
+            parent[xroot] = yroot
+
+        elif rank[xroot] > rank[yroot]:
+            parent[yroot] = xroot
+
+        else:
+            parent[yroot] = xroot
+            rank[xroot] += 1
+
+    # Kruskal Algorithm
+    def KruskalMST(self):
+
+        result = []
+
+        # Index for sorted edges
+        i = 0
+
+        # Count selected edges
+        e = 0
+
+        # Sort edges according to weight
+        self.graph = sorted(
+            self.graph,
+            key=lambda item: item[2]
+        )
+
+        parent = []
+        rank = []
+
+        # Create subsets
+        for node in range(self.V):
+            parent.append(node)
+            rank.append(0)
+
+        # Select V-1 edges
+        while e < self.V - 1:
+
+            # Pick smallest edge
+            u, v, w = self.graph[i]
+            i += 1
+
+            x = self.find(parent, u)
+            y = self.find(parent, v)
+
+            # If no cycle
+            if x != y:
+
+                e += 1
+                result.append([u, v, w])
+
+                self.union(
+                    parent,
+                    rank,
+                    x,
+                    y
+                )
+
+        minimumCost = 0
+
+        print("Edges in constructed MST")
+
+        for u, v, weight in result:
+            minimumCost += weight
+
+            print(
+                "%d -- %d == %d"
+                % (u, v, weight)
+            )
+
+        print(
+            "Minimum Spanning Tree",
+            minimumCost
+        )
+
+
+# Driver code
+g = Graph(4)
+
+g.addEdge(0, 1, 10)
+g.addEdge(0, 2, 6)
+g.addEdge(0, 3, 5)
+g.addEdge(1, 3, 15)
+g.addEdge(2, 3, 4)
+
+g.KruskalMST()
+
+'''
+OUTPUT:
+Edges in constructed MST
+2 -- 3 == 4
+0 -- 3 == 5
+0 -- 1 == 10
+Minimum Spanning Tree 19
+'''
+------------------------------------------------------------------------------------------------------------
+COLOR :
+
+# Adjacency Matrix
+G = [
+    [0, 1, 1, 0, 1, 0],
+    [1, 0, 1, 1, 0, 1],
+    [1, 1, 0, 1, 1, 0],
+    [0, 1, 1, 0, 0, 1],
+    [1, 0, 1, 0, 0, 1],
+    [0, 1, 0, 1, 1, 0]
+]
+
+# Node names
+node = "abcdef"
+
+# Store node index
+t_ = {}
+
+for i in range(len(G)):
+    t_[node[i]] = i
+
+# Count degree of each node
+degree = []
+
+for i in range(len(G)):
+    degree.append(sum(G[i]))
+
+# Available colors
+colorDict = {}
+
+for i in range(len(G)):
+    colorDict[node[i]] = [
+        "Blue",
+        "Red",
+        "Yellow",
+        "Green"
+    ]
+
+# Sort nodes according to degree
+sortedNode = []
+indeks = []
+
+# Selection sort
+for i in range(len(degree)):
+
+    _max = 0
+
+    for j in range(len(degree)):
+
+        if j not in indeks:
+
+            if degree[j] > _max:
+                _max = degree[j]
+                idx = j
+
+    indeks.append(idx)
+    sortedNode.append(node[idx])
+
+# Main process
+theSolution = {}
+
+for n in sortedNode:
+
+    setTheColor = colorDict[n]
+
+    # Assign first available color
+    theSolution[n] = setTheColor[0]
+
+    adjacentNode = G[t_[n]]
+
+    for j in range(len(adjacentNode)):
+
+        if (
+            adjacentNode[j] == 1
+            and (
+                setTheColor[0]
+                in colorDict[node[j]]
+            )
+        ):
+            colorDict[node[j]].remove(
+                setTheColor[0]
+            )
+
+# Print solution
+for t, w in sorted(theSolution.items()):
+    print(
+        "Node",
+        t,
+        "=",
+        w
+    )
+
+'''
+OUTPUT :
+Node a = Yellow
+Node b = Blue
+Node c = Red
+Node d = Yellow
+Node e = Blue
+Node f = Red
+'''
+
+---------------------------------------------------------------------------------------------------------------------------------------
+CHATBOT:
+
+# Install library first
+# pip install chatterbot
+# pip install chatterbot-corpus
+# pip install sqlalchemy==1.3.24
+
+from chatterbot import ChatBot
+from chatterbot.trainers import ListTrainer
+
+# Create chatbot
+bot = ChatBot('Bot')
+
+# Create trainer
+trainer = ListTrainer(bot)
+
+# Train chatbot
+trainer.train([
+    "Hi, can I help you",
+    "Who are you?",
+    "I am your virtual assistant. Ask me any questions...",
+    "Where do you operate?",
+    "We operate from Singapore",
+    "What payment methods do you accept?",
+    "We accept debit cards and major credit cards",
+    "I would like to speak to your customer service agent",
+    "Please call +65 3333 3333. Our operating hours are from 9am to 5pm, Monday to Friday"
+])
+
+trainer.train([
+    "What payment methods do you offer?",
+    "We accept debit cards and major credit cards",
+    "How to contact customer service agent",
+    "Please call +65 3333 3333. Our operating hours are from 9am to 5pm, Monday to Friday"
+])
+
+# Chat loop
+while True:
+
+    request = input("You: ")
+
+    if request == 'OK' or request == 'ok':
+        print("Bot: Bye")
+        break
+
+    else:
+        response = bot.get_response(request)
+        print("Bot:", response)

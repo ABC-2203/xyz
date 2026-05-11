@@ -1,0 +1,90 @@
+What does lightning experience do in Salesforce?
+
+Salesforce Lightning Experience is Salesforce’s modern user interface designed to improve productivity, usability, and customization compared to the older Salesforce Classic interface.
+
+Main functions of Lightning Experience:
+Modern UI: Cleaner, faster, and more responsive design
+
+Custom dashboards: Interactive reports and visual analytics
+
+Kanban views: Manage leads, opportunities, and tasks visually
+
+App Builder: Drag-and-drop tools to create custom apps/pages
+
+Improved sales productivity: Activity timelines, opportunity workspace, and better lead management
+
+Service tools: Enhanced customer support with service console
+
+Mobile compatibility: Better integration with Salesforce mobile app
+
+Einstein AI features: Smart insights, predictions, and automation
+
+Benefits:
+Faster workflow
+
+Better data visualization
+
+Increased automation
+
+More customization options
+
+Enhanced user experience
+
+In simple terms:
+Lightning Experience helps businesses manage sales, customer service, and operations more efficiently with a modern, feature-rich platform.
+
+
+What do u mean by apex class and visualforce page ? Y do we use them ?
+
+In Salesforce:
+
+Apex Class
+An Apex class is custom server-side code (similar to Java) used to add business logic in Salesforce.
+
+Why use Apex Classes?
+Automate tasks
+
+Validate data
+
+Create custom business processes
+
+Handle triggers
+
+Connect Salesforce with external systems (APIs)
+
+Build custom controllers for pages
+
+Example:
+public class HelloWorld {
+    public static String greet() {
+        return 'Hello Salesforce!';
+    }
+}
+Visualforce Page
+A Visualforce page is a custom user interface page built using HTML-like tags and Salesforce components.
+
+Why use Visualforce?
+Create custom forms
+
+Design personalized dashboards
+
+Build custom pages not possible with standard layouts
+
+Connect with Apex classes for dynamic data display
+
+Example:
+<apex:page>
+    <h1>Hello Salesforce</h1>
+</apex:page>
+Relationship:
+Apex Class = Backend logic
+
+Visualforce Page = Frontend UI
+
+Simple analogy:
+Apex = Brain
+
+Visualforce = Face
+
+Modern Note:
+Salesforce now often prefers Lightning Components / Lightning Web Components (LWC) over Visualforce for newer projects, but Visualforce is still used in legacy systems.

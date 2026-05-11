@@ -1,0 +1,126 @@
+ASSIGNMENT NO: 05
+
+Problem Statement: MINIPROJECT- Design and Develop an Custom Application on Salesforce
+
+Project Name: - Student Feedback Management System (Salesforce App)
+
+
+Title: Design and develop custom Application (Mini Project) using Salesforce Cloud.
+Step-1: Click on Lightning Experience
+Step-2: Click on Setup and select Setup for current App.
+
+ 
+Step-3:
+Click on Create an Object
+So, Click on Object Manager Tab next to Home Tab Click on Create –Custom Object
+
+
+
+
+Step-4: Create Custom Object
+
+Go to Object Manager
+Click Create → Custom Object
+Label → Student Plural → Students
+Record Name → Student Name Data Type → Text
+✔ Tick: Allow Reports
+👉 Click Save
+ 
+ 
+Step-5: Add Fields to Student
+
+Go to Fields & Relationships → New
+Create:
+➤ Age
+Type: Number
+➤ Email Type: Email
+➤ Course Type: Text
+Click Save after each
+
+ 
+Step-6: Create “Feedback”
+
+Object Manager → Create → Custom Object Label → Feedback
+Plural → Feedbacks
+Record Name → Feedback Name Type → Text
+✔ Allow Reports
+👉 Click-Next-Next-Save
+
+
+
+
+Step-7: Add Fields to Feedback
+Create:
+➤ Comment
+Type: Long Text Area
+➤ Rating
+Type: Number (1–5)
+Similar to students fields and labels
+ 
+
+
+ 
+
+
+
+Step-8: Create Relationship
+👉 This connects Feedback to Student
+In Feedback → Fields → New Select Lookup Relationship Choose Student
+Save
+👉 Now each feedback is linked to a student
+
+
+ 
+
+ 
+
+
+Step 9: Create Tabs
+Setup → Search Tabs
+Click New Create:
+Student Tab Feedback Tab
+Choose any icons → Save
+
+ 
+Step 10: Create App
+Go to App Manager
+Click New Lightning App Fill:
+App Name → Student Feedback App Click Next → Next
+👉 Add:
+Student Feedback
+Click Next → Save & Finish
+Select System Administrator Save
+
+
+
+
+
+ 
+ 
+
+
+
+
+
+Step 11: Open App
+
+Click on App Launcher  Symbol Open Student Feedback App
+ 
+ 
+Step 12: Use Your App 🎉
+
+➤ Add Student Go to Student tab Click New
+Fill details → Save
+➤ Add Feedback Go to Feedback tab Click New
+Select Student
+Add Comment + Rating Save
+ 
+ 
+
+ 
+ 
+
+ 
+Step 13: Mobile View Right-click page → Inspect Toggle device toolbar 📱 View mobile layout
+
+

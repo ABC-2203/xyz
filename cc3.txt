@@ -1,0 +1,409 @@
+
+
+ASSIGNMENT NO: 03
+
+Title: Creating an Application in SalesForce.com using Apex programming Language
+
+CreateAccount.apxc
+
+public class CreateAccount { public String name {get; set;}
+public String phoneNumber {get; set;} public String selectedname {get; set;} public String websiteURL {get; set;}
+public List<Selectoption> lstnamesel {get; set;}
+
+public CreateAccount(ApexPages.StandardController controller) { lstnamesel = new List<selectoption>();
+lstnamesel.add(new selectOption('','- None -')); lstnamesel.add(new selectOption('IT','IT')); lstnamesel.add(new selectOption('MECH','MECH')); lstnamesel.add(new selectOption('CHEM','CHEM')); lstnamesel.add(new selectOption('PHARMA','PHARMA'));
+}
+public PageReference createAccount() { System.debug('teset create'); if(!String.isEmpty(name)) {
+Account accountRecord = new Account (Name = name,
+Phone = phoneNumber, Industry = selectedname, Website = websiteURL);
+INSERT accountRecord;
+
+PageReference pg = new PageReference('/'+accountRecord.Id); pg.setRedirect(true);
+return pg;
+} else {
+ApexPages.addmessage(new ApexPages.message(ApexPages.severity.CONFIRM,'Please enter Account Name'));
+}
+ 
+return NULL;
+}
+
+public PageReference cancelAccount() {
+PageReference pg = new PageReference('/'+Schema.SObjectType. Account.getKeyPrefix()+'/o');
+
+
+return pg;
+}
+}
+
+
+
+ 
+CreateAccount.vfp
+<apex:page standardController="Account" extensions="CreateAccount">
+<apex:form id="apexFrom" >
+<apex:pageBlock title="Create Account:" id="pageBlockId">
+
+<apex:pageMessages id="showmsg"></apex:pageMessages>
+<apex:pageBlockSection columns="2" >
+<!--<div class = "requiredInput">
+<div class = "requiredBlock"></div>
+<apex:inputText value="{!name}" label="Account Name" required="true"/>
+</div>-->
+<apex:inputText value="{!name}" label="Account Name" required="true"/>
+<apex:inputText value="{!phoneNumber}" label="Phone" />
+<apex:selectList size="1" value="{!selectedname}" label="Industry">
+<apex:selectOptions value="{!lstnamesel}"/>
+</apex:selectList>
+<apex:inputText value="{!websiteURL}" label="Website" />
+</apex:pageBlockSection>
+
+<apex:pageBlockButtons >
+<apex:commandButton action="{!createAccount}" value="Save"/>
+<apex:commandButton action="{!cancelAccount}" value="Cancel"/>
+</apex:pageBlockButtons>
+</apex:pageBlock>
+
+<!-- ACTION FUNCTIONS-->
+<apex:actionFunction name="createFunction" action="{!createAccount}"/>
+<apex:actionFunction name="cancelFunction" action="{!cancelAccount}"/>
+</apex:form>
+</apex:page>
+ 
+
+Step No 1:
+
+Create new org:
+https://developer.salesforce.com/signup
+
+Step No 2:
+
+After signup, loging using following URl https://login.salesforce.com/
+
+Step No 3:
+
+Login Page
+ 
+Step No:4
+
+Go to Developer Console for writing Program
+
+
+Step No 5:
+Click on file then Select Apex class and write a code
+
+ 
+
+
+Step No 6:
+
+Select tabs section (for creating GUI)
+ 
+
+Step No 7: Open a pages
+
+
+Step No 8:
+
+Program Windows
+
+
+
+
+Step No 9:
+
+Program Screenshots
+ 
+Output:
+
+
+
+
+// steps 
+
+Step-by-Step Process to Create an Account Application in Salesforce
+
+This project uses:
+
+Visualforce Page → Frontend UI
+Apex Controller → Backend Logic
+Account Object → Salesforce Standard Object
+1. Login to Salesforce
+
+Open:
+
+Salesforce Developer Org
+
+OR login directly:
+
+Salesforce Login
+
+2. Open Developer Console
+
+After login:
+
+Steps
+Click ⚙ Setup Gear
+Click Developer Console
+
+A new window opens.
+
+3. Create Apex Class
+Steps
+In Developer Console
+Click:
+File → New → Apex Class
+Enter Class Name:
+CreateAccount
+Click OK
+
+
+Step-by-Step Process to Create an Account Application in Salesforce
+
+This project uses:
+
+Visualforce Page → Frontend UI
+Apex Controller → Backend Logic
+Account Object → Salesforce Standard Object
+1. Login to Salesforce
+
+Open:
+
+Salesforce Developer Org
+
+OR login directly:
+
+Salesforce Login
+
+2. Open Developer Console
+
+After login:
+
+Steps
+Click ⚙ Setup Gear
+Click Developer Console
+
+A new window opens.
+
+3. Create Apex Class
+Steps
+In Developer Console
+Click:
+File → New → Apex Class
+Enter Class Name:
+CreateAccount
+Click OK
+4. Paste Apex Controller Code
+
+Delete existing code and paste this:
+
+public class CreateAccount {
+
+    public String name { get; set; }
+    public String phoneNumber { get; set; }
+    public String selectedname { get; set; }
+    public String websiteURL { get; set; }
+
+    public List<SelectOption> lstnamesel { get; set; }
+
+    public CreateAccount(ApexPages.StandardController controller) {
+
+        lstnamesel = new List<SelectOption>();
+
+        lstnamesel.add(new SelectOption('', '- None -'));
+        lstnamesel.add(new SelectOption('IT', 'IT'));
+        lstnamesel.add(new SelectOption('MECH', 'MECH'));
+        lstnamesel.add(new SelectOption('CHEM', 'CHEM'));
+        lstnamesel.add(new SelectOption('PHARMA', 'PHARMA'));
+    }
+
+    public PageReference createAccount() {
+
+        if (!String.isEmpty(name)) {
+
+            Account accountRecord = new Account(
+                Name = name,
+                Phone = phoneNumber,
+                Industry = selectedname,
+                Website = websiteURL
+            );
+
+            insert accountRecord;
+
+            PageReference pg = new PageReference('/' + accountRecord.Id);
+            pg.setRedirect(true);
+
+            return pg;
+
+        } else {
+
+            ApexPages.addMessage(
+                new ApexPages.Message(
+                    ApexPages.Severity.ERROR,
+                    'Please enter Account Name'
+                )
+            );
+        }
+
+        return null;
+    }
+
+    public PageReference cancelAccount() {
+
+        PageReference pg = new PageReference(
+            '/' + Schema.SObjectType.Account.getKeyPrefix() + '/o'
+        );
+
+        return pg;
+    }
+}
+5. Save Apex Class
+
+Click:
+
+File → Save
+
+OR
+
+Ctrl + S
+6. Create Visualforce Page
+Steps
+In Developer Console
+Click:
+File → New → Visualforce Page
+Enter Page Name:
+CreateAccountPage
+Click OK
+7. Paste Visualforce Code
+<apex:page standardController="Account" extensions="CreateAccount">
+
+    <apex:form id="apexForm">
+
+        <apex:pageBlock title="Create Account" id="pageBlockId">
+
+            <apex:pageMessages id="showmsg" />
+
+            <apex:pageBlockSection columns="2">
+
+                <apex:inputText value="{!name}"
+                                label="Account Name"
+                                required="true" />
+
+                <apex:inputText value="{!phoneNumber}"
+                                label="Phone" />
+
+                <apex:selectList size="1"
+                                 value="{!selectedname}"
+                                 label="Industry">
+
+                    <apex:selectOptions value="{!lstnamesel}" />
+
+                </apex:selectList>
+
+                <apex:inputText value="{!websiteURL}"
+                                label="Website" />
+
+            </apex:pageBlockSection>
+
+            <apex:pageBlockButtons>
+
+                <apex:commandButton action="{!createAccount}"
+                                    value="Save" />
+
+                <apex:commandButton action="{!cancelAccount}"
+                                    value="Cancel" />
+
+            </apex:pageBlockButtons>
+
+        </apex:pageBlock>
+
+    </apex:form>
+
+</apex:page>
+
+
+
+
+8. Save Visualforce Page
+
+Press:
+
+Ctrl + S
+9. Run the Application
+Steps
+
+Click:
+
+Preview
+
+OR open URL:
+
+https://yourDomain.apex.salesforce.com/apex/CreateAccountPage
+10. Test the Application
+
+Fill:
+
+Account Name
+Phone
+Industry
+Website
+
+Click:
+
+Save
+
+The record will be inserted into the Account object.
+
+11. Verify Record
+Steps
+Open App Launcher
+Search:
+Accounts
+Open Accounts
+Verify inserted record
+
+
+
+
+
+
+
+
+Working Flow of Application
+User fills form
+        ↓
+Visualforce Page sends data
+        ↓
+Apex Controller receives data
+        ↓
+Account object record created
+        ↓
+Data saved in Salesforce database
+        ↓
+Redirect to Account Record
+
+
+
+
+
+Technologies Used
+Technology	Purpose
+Salesforce	CRM Platform
+Visualforce	Frontend UI
+Apex	Backend Language
+SOQL/SObject	Database Operations
+Standard Controller	Salesforce Built-in Controller
+
+
+
+
+
+Real-Life Applications
+
+This type of application is used for:
+
+CRM systems
+Customer management
+Lead management
+Employee portals
+Business automation
+Sales applications
